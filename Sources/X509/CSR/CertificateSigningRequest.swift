@@ -83,9 +83,9 @@ public struct CertificateSigningRequest {
         // TODO: enforce that signature algorithm and signature have the same algorithm.
         self.signatureAlgorithm = signatureAlgorithm
         self.signature = signature
-        self.infoBytes = try DER.Serializer.serialized(element: self.info)
-        self.signatureAlgorithmBytes = try DER.Serializer.serialized(element: AlgorithmIdentifier(self.signatureAlgorithm))
-        self.signatureBytes = try DER.Serializer.serialized(element: ASN1BitString(self.signature))
+        self.infoBytes = try DER.Serializer.serialized(element: self.info)[...]
+        self.signatureAlgorithmBytes = try DER.Serializer.serialized(element: AlgorithmIdentifier(self.signatureAlgorithm))[...]
+        self.signatureBytes = try DER.Serializer.serialized(element: ASN1BitString(self.signature))[...]
     }
 
     /// Construct a CSR for a specific private key.
@@ -118,9 +118,9 @@ public struct CertificateSigningRequest {
 
         let infoBytes = try DER.Serializer.serialized(element: self.info)
         self.signature = try privateKey.sign(bytes: infoBytes, signatureAlgorithm: signatureAlgorithm)
-        self.infoBytes = infoBytes
-        self.signatureAlgorithmBytes = try DER.Serializer.serialized(element: AlgorithmIdentifier(self.signatureAlgorithm))
-        self.signatureBytes = try DER.Serializer.serialized(element: ASN1BitString(self.signature))
+        self.infoBytes = infoBytes[...]
+        self.signatureAlgorithmBytes = try DER.Serializer.serialized(element: AlgorithmIdentifier(self.signatureAlgorithm))[...]
+        self.signatureBytes = try DER.Serializer.serialized(element: ASN1BitString(self.signature))[...]
     }
 
     @inlinable
